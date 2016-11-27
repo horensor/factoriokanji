@@ -1,5 +1,6 @@
 # FactorioKanji
 FactorioKanjiはFactorioChatのフォークです。
+@キーでダイアログ表示ではなく、全角/半角キーで表示します。
 
 FactorioChatはFactorioで日本語のチャットを支援するスクリプトです．
 Factorio 0.12.29のゲーム内チャットでは日本語入力ができないので作りました．
@@ -13,15 +14,17 @@ AutoHotkey Ahk2Exeによるコンバート。
 
   https://github.com/horensor/factoriokanji/archive/master.zip
   をダウンロードしfactoriokanji.exeを実行する。
+  factorionkanji.f1.exe はF1キーに、factorionkanji.Ins.exe はInsertキーに
+  アサインしています。
 
 
 ##使用方法
- - 起動&使用
+- 起動&使用
   1. Factorioを起動してからfactoriokanji.exeを起動
-  2. 入力したい文字列
+  2. 日本語を入力したい際に全角/半角キーを押す
   3. 送信したい文字を打ったら`Enter`または`OK`ボタンを押して送信
 
- - 終了
+- 終了
   1. Factorioが起動してない場合、終了を促すダイアログが出ます。
   2. OKを押すと終了します。
   3. タスクトレイアイコンを右クリックしてExitでも終了できます。
