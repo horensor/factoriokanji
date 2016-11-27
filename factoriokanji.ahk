@@ -37,12 +37,12 @@ Loop
 		Process,Exist,Factorio.exe
 		If ErrorLevel<>0
 			WinActivate,ahk_pid %ErrorLevel%
-
-		;クリップボードに取得した文字列を代入
-		clipboard = %OutputVar%
-		;キー入力
-		Send, ^v
-		;Send,{Enter}
+		if( StrLen(%OutputVar%) > 0 ){
+			;クリップボードに取得した文字列を代入
+			clipboard = %OutputVar%
+			;キー入力
+			Send, ^v
+		}
 	}else{
 	return
 	}
