@@ -11,6 +11,8 @@ AutoHotkey Ahk2Exeによるコンバート。
 
 ##ダウンロード・インストール
 
+  https://github.com/horensor/factoriokanji/archive/master.zip
+  をダウンロードしfactoriokanji.exeを実行する。
 
 
 ##使用方法
@@ -29,7 +31,6 @@ AutoHotkey Ahk2Exeによるコンバート。
 ##AutoHotkeyのスクリプトとして実行したい場合
 
  1. AutoHotkeyを下記URLからダウンロードしてインストール
-
    [https://autohotkey.com/](https://autohotkey.com/)
  2. facoriokanji.ahkを実行
  3. あとはexeを起動した場合と同じ
