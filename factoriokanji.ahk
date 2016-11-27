@@ -17,7 +17,10 @@ Loop
 	IfWinExist, ahk_exe Factorio.exe
 	{
 		agreebackground=0
-		;@が入力されるまで5秒待つ．もしチャット開始キーが違う場合は最後の@の部分をそのキーに変更
+		;全角/半角が入力されるまで5秒待つ
+		;ほかのキーにしたい場合はここを変更してください。
+		;Insにしたい場合は{Ins}とか
+		;https://sites.google.com/site/autohotkeyjp/reference/commands/Send#SpecialKeys
 		Input ,Key,T5 V,{vkF4sc029}
 		;タイムアウトの場合
 		If ErrorLevel = Timeout
