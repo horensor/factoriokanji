@@ -38,6 +38,10 @@ AutoHotkey Ahk2Exeによるコンバート。
  2. facoriokanji.ahkを実行
  3. あとはexeを起動した場合と同じ
 
+##History
+
+https://github.com/horensor/FactorioKanji/wiki 参照
+
 ##ライセンス
 
 バイナリーについてはAHKがGPL2のため、ライセンスにご注意を。
