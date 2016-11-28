@@ -5,6 +5,8 @@ SetWorkingDir %A_ScriptDir%  ; Ensures a consistent starting directory.
 
 Menu, Tray, Icon, factoriokanji.ico
 
+fkver:="FactorioKanji 0.0.1"
+
 ;初期変数
 agreebackground:=0
 
@@ -34,13 +36,15 @@ Loop
 	IfWinActive, ahk_exe Factorio.exe
 	{
 		;入力のボックスを表示させる
-		InputBox, OutputVar , チャット入力, 文字を入力してください, , 375, 130
+		InputBox, OutputVar , %fkver%, 文字を入力してください, , 375, 130
 
 		;ウィンドウフォーカスをFactorio.exeに変更
 		Process,Exist,Factorio.exe
 		If ErrorLevel<>0
 			WinActivate,ahk_pid %ErrorLevel%
-		if( StrLen(%OutputVar%) > 0 ){
+
+
+		if( StrLen(OutputVar) > 0 ){
 			;クリップボードに取得した文字列を代入
 			clipboard = %OutputVar%
 			;キー入力
