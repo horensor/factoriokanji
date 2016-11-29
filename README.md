@@ -1,45 +1,36 @@
 # FactorioKanji
-FactorioKanjiはFactorioChatのフォークです。
-@キーでダイアログ表示ではなく、全角/半角キーで表示します。
+FactorioKanjiはFactorioChatのフォークからはじまり、Factorioにおいて
+日本語入力をするためにダイアログを出すためのAutoHotkeyスクリプトです。
+Windows NT系統なら動作すると思いますが、メインはWindows10で動作確認しております。
 
-FactorioChatはFactorioで日本語のチャットを支援するスクリプトです．
-Factorio 0.12.29のゲーム内チャットでは日本語入力ができないので作りました．
-
-##動作環境
-Windows Vista以降。
-Windows10にてのみ動作確認
-AutoHotkey Ahk2Exeによるコンバート。
 
 ##ダウンロード・インストール
 
   https://github.com/horensor/FactorioKanji/releases
   からダウンロードしfactoriokanji.exeを実行してください。
-  factorionkanji.f1.exe はF1キーに、factorionkanji.Ins.exe はInsertキーに
-  アサインしています。
 
 
 ##使用方法
 - 起動&使用
   1. factoriokanji.exeを起動
-  2. Factorioが起動していない際は終了するか訪ねます。Cancelで常駐します。
+  2. Factorioが起動していない場合はダイアログが開きます。Hideで常駐します。
   3. 日本語を入力したい際に全角/半角キーを押す
   4. 送信したい文字を打ったら`Enter`または`OK`ボタンを押して送信
 
 - 終了
-  1. Factorioが起動してない場合、終了を促すダイアログが出ます。
-  2. OKを押すと終了します。
-  3. タスクトレイアイコンを右クリックしてExitでも終了できます。
-  4. factorio.exeが終了すると再度ダイアログが出ます。
+  1. Factorioが終了するとダイアログが開きます。Exitで終了します。
+  2. Hideした状態ではタスクトレイアイコンを右クリックしてExitで終了します。
 
+- 起動キーを変更する
 
-- FactorioChatを使われてた方はお分かりになるかと思いますが、この挙動は元々常駐しない前提のものを常駐させるように変更したため、不自然だと考えています。AutoHotKeyがGPL2のため、GPLにするためフルスクラッチ（笑）しますので、ご容赦ください。
+ - プルダウンから{f1}{Ins}などを選ぶとそれぞれF1(ファンクション1)、Ins(Insert)キーで起動するようになります。変更後更新ボタンを押してください。
+ - 全角半角がうまく効かない場合、全角半角2・全角半角3もお試しください。
+ - https://sites.google.com/site/autohotkeyjp/reference/KeyList のキーが使えます。
+
 
 ##AutoHotkeyのスクリプトとして実行したい場合
 
- 1. AutoHotkeyを下記URLからダウンロードしてインストール
-   [https://autohotkey.com/](https://autohotkey.com/)
- 2. facoriokanji.ahkを実行
- 3. あとはexeを起動した場合と同じ
+ AutoHotkeyをインストール https://autohotkey.com/ し facoriokanji.ahk を読み込んでください。
 
 ##History & Supports
 
@@ -49,28 +40,4 @@ AutoHotkey Ahk2Exeによるコンバート。
 
 ##ライセンス
 
-バイナリーについてはAHKがGPL2のため、ライセンスにご注意を。
-```
-The MIT License (MIT)
-
-Copyright (c) 2016 Takuma Niihara
-Copyright (c) 2016 Horensor
-
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE.
-```
+LICENSE.TXTのとおりGPL2とMITのデュアルライセンスですが、バイナリーについてはAHKがGPL2となります。

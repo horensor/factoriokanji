@@ -1,66 +1,108 @@
-﻿#NoEnv  ; Recommended for performance and compatibility with future AutoHotkey releases.
-#SingleInstance ;同じスクリプトを複数起動できないようにする
-SendMode Input  ; Recommended for new scripts due to its superior speed and reliability.
-SetWorkingDir %A_ScriptDir%  ; Ensures a consistent starting directory.
+﻿#SingleInstance force
+#NoEnv
+SendMode Input
+IfExist, factoriokanji.ico
+  Menu, Tray, Icon, factoriokanji.ico
 
-Menu, Tray, Icon, factoriokanji.ico
+Menu, Tray , DeleteAll
+Menu, Tray , Add , ウィンドウ表示, GuiShow
+Menu, Tray , Default, ウィンドウ表示
 
-fkver:="FactorioKanji 0.0.1"
+fkver:="FactorioKanji 0.1.1"
+
+Menu, Tray , Tip, %fkver%
 
 ;初期変数
 agreebackground:=0
+ShowHotKey:="{vkF4sc029}.{vkF3sc029}"
 
+GUI, Font , S12 Q2, Meiryo UI
+GUI, 2:Font , S12 Q2, Meiryo UI
+WinSet, TransColor, CCCCCC 150
+;Gui, -Caption  
+Gui, Add, Text ,, FactorioKanji(Hide,Sendで常駐、Exitで終了)
+Gui, Add, Edit, x10 W600 vEditString 
+Gui, Add, Button, X+10 vSend GSubmit Default , Send
+Gui, Add, Button, x+10 vHide GHide , Hide
+Gui, Add, Button, x+10 vExit GExit , Exit
+Gui, Add, Checkbox , x10 vShowAfterFactorio checked, チェックすると、Factorioの起動してないときはポップアップしません。
+Gui, Add, Combobox, x+10 vShowHotKey, 全角半角||{F1}|{Ins}|全角半角2
+Gui, Add, Button, x+10 GReloadHotKey , ホットキー更新
+Gui, Add, Checkbox , x10 vShowFactorioChat , チェックすると、@キーで起動します。(チャットモード)
+Gui, Add, Button, x+10 GReloadHotKey , 更新
 
-MainLoop:
-;メインループ
+Gosub, GuiShow
+gosub, Main
+
+Main:
 Loop
 {
-	;Factorio.exeが起動しているか
-	IfWinExist, ahk_exe Factorio.exe
+	Input ,Key,T10 V, %ShowHotKey%
+	If ErrorLevel = Timeout
 	{
-		agreebackground=0
-		;全角/半角が入力されるまで5秒待つ
-		;ほかのキーにしたい場合はここを変更してください。
-		;Insにしたい場合は{Ins}とか
-		;https://sites.google.com/site/autohotkeyjp/reference/commands/Send#SpecialKeys
-		Input ,Key,T5 V,{vkF4sc029}
-		;タイムアウトの場合
-		If ErrorLevel = Timeout
+		IfWinExist, ahk_exe Factorio.exe
+		{
 			Continue
-	}Else{
-		;ループから抜ける
-		Break
+		}else{
+			if( agreebackground==0 )
+				Gosub, GuiShow
+		}
 	}
 
-	;Factorio.exeがアクティブだった場合
 	IfWinActive, ahk_exe Factorio.exe
 	{
-		;入力のボックスを表示させる
-		InputBox, OutputVar , %fkver%, 文字を入力してください, , 375, 130
-
-		;ウィンドウフォーカスをFactorio.exeに変更
-		Process,Exist,Factorio.exe
-		If ErrorLevel<>0
-			WinActivate,ahk_pid %ErrorLevel%
-
-
-		if( StrLen(OutputVar) > 0 ){
-			;クリップボードに取得した文字列を代入
-			clipboard = %OutputVar%
-			;キー入力
-			Send, ^v
-		}
-	}else{
-	return
+		Gosub, GuiShow
 	}
 }
-;メッセージ表示
+return
 
-if( agreebackground=0 )
-MsgBox,1,, Factorioが起動していませんが終了しますか?
-;MsgBox, Factorioが起動していないため終了します
-;プログラム終了
-IfMsgBox, Ok 
-	ExitApp
-agreebackground:=1
-Goto, MainLoop
+ReloadHotKey:
+Gui, Submit
+if( ShowHotKey=="全角半角" )
+  ShowHotKey:="{vkF4sc029}.{vkF3sc029}"
+if( ShowHotKey=="全角半角2" )
+  ShowHotKey:="{vkF4sc029}"
+if( ShowHotKey=="全角半角3" )
+  ShowHotKey:="{vkF3sc029}"
+
+if( ShowAfterFactorio != 0 )
+	agreebackground:=1
+if( ShowFactorioChat !=0 )
+  ShowHotKey := ShowHotKey . ".@"
+
+return
+
+GuiShow:
+Gui, Show, , %fkver%
+Guicontrol, Focus, Send
+Guicontrol, Focus, EditString
+return
+
+Pause::
+msgbox, %ShowHotKey%
+
+Submit:
+Gui, Submit
+Hide:
+if( EditString!="" )
+	Send, %EditString%
+if( ShowFactorioChat != 0 )
+	Send, {Enter}
+
+GuiControl, Text, EditString ,
+gosub,ReloadHotKey
+return
+
+GuiHide:
+{
+Gui, Hide
+}
+return
+
+Exit:
+{
+ExitApp
+}
+return
+
+
