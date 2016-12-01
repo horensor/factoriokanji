@@ -8,14 +8,15 @@ Menu, Tray , DeleteAll
 Menu, Tray , Add , ウィンドウ表示, GuiShow
 Menu, Tray , Default, ウィンドウ表示
 
-fkver:="FactorioKanji 0.1.2"
+fkver:="FactorioKanji 0.1.3"
 
 Menu, Tray , Tip, %fkver%
 
 ;初期変数
-agreebackground:=0
-ShowHotKey:="{vkF4sc029}.{vkF3sc029}"
+agreebackground:=1
+ShowHotKey:="{vkF4}.{vkF3}"
 
+Gui,+OwnDialogs
 GUI, Font , S12 Q2, Meiryo UI
 GUI, 2:Font , S12 Q2, Meiryo UI
 WinSet, TransColor, CCCCCC 150
@@ -82,16 +83,18 @@ Loop
 		Input ,Key,T2 V, %ShowHotKey%
 	If ErrorLevel = Timeout
 	{
-		IfWinExist, ahk_exe Factorio.exe
+		IfWinExist, ahk_exe factorio.exe
 		{
 			Continue
 		}else{
+			GuiControlGet, vv, Visible , EditString
+			if( vv == 0 )
 			if( agreebackground==0 )
 				Gosub, Exit
 		}
 	}
 
-	IfWinActive, ahk_exe Factorio.exe
+	IfWinActive, ahk_exe factorio.exe
 	{
 		Gosub, GuiShow
 	}
@@ -100,20 +103,22 @@ return
 
 EncodeZenHan(code){
 if( code=="全角半角" )
-	return "{vkF4sc029}.{vkF3sc029}"
+	return "{vkF4}.{vkF3}"
 if( code=="全角半角2" )
-	return "{vkF4sc029}"
+	return "{vkF4}"
 if( code=="全角半角3" )
-	return "{vkF3sc029}"
+	return "{vkF3}"
 return code
 }
 
 DecodeZenHan(code){
+if( code=="{vkF4}.{vkF3}" )
+	return "全角半角"
 if( code=="{vkF4sc029}.{vkF3sc029}" )
 	return "全角半角"
-if( code=="{vkF4sc029}" )
+if( code=="{vkF4}" )
 	return "全角半角2"
-if( code=="{vkF3sc029}" )
+if( code=="{vkF3}" )
 	return "全角半角3"
 return code
 }
@@ -125,6 +130,9 @@ ShowHotKey:=EncodeZenHan(ShowHotKey)
 ChatHotKey:=EncodeZenHan(ChatHotKey)
 if( ShowAfterFactorio != 0 )
 	agreebackground:=1
+else
+	agreebackground:=0
+
 if( SaveFactorio !=0 )
 {
 	IniWrite, %ShowAfterFactorio% , FactorioKanji.ini, FactorioKanji, ShowAfterFactorio
@@ -150,47 +158,47 @@ return
 
 
 ViewEvolution:
-Gui, Submit
-GuiControl, Text, EditString ,
-Gosub, PreCommand
-Send, /evolution
-Gosub, PostCommand
+command := "/evolution"
+Gosub, SubmitCommand
 return
 
 ViewTime:
-Gui, Submit
-GuiControl, Text, EditString ,
-Gosub, PreCommand
-Send, /time
-Gosub, PostCommand
+command := "/time"
+Gosub, SubmitCommand
 return
 
 
-;"SubmitCommand(command){
-;}
-PreCommand:
-Gui, Submit
-GuiControl, Text, EditString ,
-WinActivate, ahk_exe Factorio.exe
-Send, %ChatHotKey%
-Send, {Enter}
-Send, {Enter}
-Send, %ChatHotKey%
-return
-PostCommand:
-Send, {Enter}
+SubmitCommand:
+IfWinExist, ahk_exe factorio.exe 
+{
+	WinActivate
+	Send, %ChatHotKey%
+	Send, {Enter}
+	Send, {Enter}
+	Send, %ChatHotKey%
+	Send, %command%
+	Send, {Enter}
+}else{
+	MsgBox, factorio.exe Windowが見つかりませんでした。
+	return
+}
 GoSub, ReloadHotKey
 return
 
 Submit:
 Gui, Submit
 GuiControl, Text, EditString ,
-
-WinActivate, ahk_exe Factorio.exe
-if( EditString!="" )
-	Send, %EditString%
-if( ShowFactorioChat != 0 )
-	Send, {Enter}
+IfWinExist, ahk_exe factorio.exe
+{
+	WinActivate
+	if( EditString!="" )
+		Send, %EditString%
+	if( ShowFactorioChat != 0 )
+		Send, {Enter}
+}else{
+	MsgBox, factorio.exe Windowが見つかりませんでした。
+	return
+}
 Hide:
 GuiEscape:
 GuiCloase:
