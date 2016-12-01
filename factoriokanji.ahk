@@ -2,13 +2,13 @@
 #NoEnv
 SendMode Input
 IfExist, factoriokanji.ico
-  Menu, Tray, Icon, factoriokanji.ico
+	Menu, Tray, Icon, factoriokanji.ico
 
 Menu, Tray , DeleteAll
 Menu, Tray , Add , ウィンドウ表示, GuiShow
 Menu, Tray , Default, ウィンドウ表示
 
-fkver:="FactorioKanji 0.1.1"
+fkver:="FactorioKanji 0.1.2"
 
 Menu, Tray , Tip, %fkver%
 
@@ -19,25 +19,67 @@ ShowHotKey:="{vkF4sc029}.{vkF3sc029}"
 GUI, Font , S12 Q2, Meiryo UI
 GUI, 2:Font , S12 Q2, Meiryo UI
 WinSet, TransColor, CCCCCC 150
-;Gui, -Caption  
-Gui, Add, Text ,, FactorioKanji(Hide,Sendで常駐、Exitで終了)
+;Gui, -Caption	
+Gui, Add, Text, x10 , FactorioKanji(Hide,Sendで常駐、Exitで終了)
 Gui, Add, Edit, x10 W600 vEditString 
 Gui, Add, Button, X+10 vSend GSubmit Default , Send
 Gui, Add, Button, x+10 vHide GHide , Hide
 Gui, Add, Button, x+10 vExit GExit , Exit
-Gui, Add, Checkbox , x10 vShowAfterFactorio checked, チェックすると、Factorioの起動してないときはポップアップしません。
-Gui, Add, Combobox, x+10 vShowHotKey, 全角半角||{F1}|{Ins}|全角半角2
-Gui, Add, Button, x+10 GReloadHotKey , ホットキー更新
-Gui, Add, Checkbox , x10 vShowFactorioChat , チェックすると、@キーで起動します。(チャットモード)
+Gui, Add, Text, x10 , FactorioKanji起動キー:
+Gui, Add, Combobox, x+10 vShowHotKey, 全角半角||{F1}|{Ins}|{Tab}|全角半角2|全角半角3
+Gui, Add, Text, x+10 , チャット開始キー:
+Gui, Add, Combobox, x+10 vChatHotKey, @||
 Gui, Add, Button, x+10 GReloadHotKey , 更新
+Gui, Add, Checkbox , x10 vShowAfterFactorio checked, チェックすると、Factorioを起動してないとき自動終了しません。
+Gui, Add, Checkbox , x10 vShowFactorioChat , チェックすると、チャットモードにします。
+Gui, Add, Checkbox , x10 vSaveFactorio , チェックすると、設定をFactorioKanji.iniに保存します。
+Gui, Add, Button, x+10 GReloadHotKey , 更新
+Gui, Add, Button, x10 vvevolution gViewEvolution, /&evolution
+Gui, Add, Button, x+10 vvtime gViewTime ,/&time
 
-Gosub, GuiShow
-gosub, Main
+IfExist, FactorioKanji.ini
+{
+	IniRead, SaveFactorio, FactorioKanji.ini, FactorioKanji, SaveFactorio
+	if( SaveFactorio==1 ){
+		GuiControl, , SaveFactorio, %SaveFactorio%
+	
+		IniRead, ShowAfterFactorio, FactorioKanji.ini, FactorioKanji, ShowAfterFactorio, 1
+		GuiControl, , ShowAfterFactorio, %ShowAfterFactorio%
+		IniRead, ShowFactorioChat, FactorioKanji.ini, FactorioKanji, ShowFactorioChat
+		GuiControl, , ShowFactorioChat, %ShowFactorioChat%
+		IniRead, ShowHotKey, FactorioKanji.ini, FactorioKanji, ShowHotKey
+		if(ShowHotKey){
+			ShowHotKey:=DecodeZenHan(ShowHotKey)
+			try{
+				GuiControl, ChooseString, ShowHotKey, %ShowHotKey%
+			}catch{
+				GuiControl, , ShowHotKey, %ShowHotKey%
+				GuiControl, ChooseString, ShowHotKey, %ShowHotKey%
+			}
+		}
+		IniRead, ChatHotKey, FactorioKanji.ini, FactorioKanji, ChatHotKey
+		if(ChatHotKey){
+			ChatHotKey:=DecodeZenHan(ChatHotKey)
+			try{
+				GuiControl, ChooseString, ChatHotKey, %ChatHotKey%
+			}catch{
+				GuiControl, , ChatHotKey, %ChatHotKey%
+				GuiControl, ChooseString, ChatHotKey, %ChatHotKey%
+			}
+		}
+	}
+}
+
+GoSub, GuiShow
+GoSub, Main
 
 Main:
 Loop
 {
-	Input ,Key,T10 V, %ShowHotKey%
+	if( ShowFactorioChat !=0 )
+		Input ,Key,T2 V, %ShowHotKey% . "." . %ChatHotKey%
+	else
+		Input ,Key,T2 V, %ShowHotKey%
 	If ErrorLevel = Timeout
 	{
 		IfWinExist, ahk_exe Factorio.exe
@@ -45,7 +87,7 @@ Loop
 			Continue
 		}else{
 			if( agreebackground==0 )
-				Gosub, GuiShow
+				Gosub, Exit
 		}
 	}
 
@@ -56,21 +98,44 @@ Loop
 }
 return
 
+EncodeZenHan(code){
+if( code=="全角半角" )
+	return "{vkF4sc029}.{vkF3sc029}"
+if( code=="全角半角2" )
+	return "{vkF4sc029}"
+if( code=="全角半角3" )
+	return "{vkF3sc029}"
+return code
+}
+
+DecodeZenHan(code){
+if( code=="{vkF4sc029}.{vkF3sc029}" )
+	return "全角半角"
+if( code=="{vkF4sc029}" )
+	return "全角半角2"
+if( code=="{vkF3sc029}" )
+	return "全角半角3"
+return code
+}
+
+
 ReloadHotKey:
 Gui, Submit
-if( ShowHotKey=="全角半角" )
-  ShowHotKey:="{vkF4sc029}.{vkF3sc029}"
-if( ShowHotKey=="全角半角2" )
-  ShowHotKey:="{vkF4sc029}"
-if( ShowHotKey=="全角半角3" )
-  ShowHotKey:="{vkF3sc029}"
-
+ShowHotKey:=EncodeZenHan(ShowHotKey)
+ChatHotKey:=EncodeZenHan(ChatHotKey)
 if( ShowAfterFactorio != 0 )
 	agreebackground:=1
-if( ShowFactorioChat !=0 )
-  ShowHotKey := ShowHotKey . ".@"
-
+if( SaveFactorio !=0 )
+{
+	IniWrite, %ShowAfterFactorio% , FactorioKanji.ini, FactorioKanji, ShowAfterFactorio
+	IniWrite, %SaveFactorio% , FactorioKanji.ini, FactorioKanji, SaveFactorio
+	IniWrite, %ShowFactorioChat% , FactorioKanji.ini, FactorioKanji, ShowFactorioChat
+	IniWrite, %ShowHotKey% , FactorioKanji.ini, FactorioKanji, ShowHotKey
+	IniWrite, %ChatHotKey% , FactorioKanji.ini, FactorioKanji, ChatHotKey
+}
 return
+
+
 
 GuiShow:
 Gui, Show, , %fkver%
@@ -78,19 +143,60 @@ Guicontrol, Focus, Send
 Guicontrol, Focus, EditString
 return
 
+
 Pause::
 msgbox, %ShowHotKey%
+return
+
+
+ViewEvolution:
+Gui, Submit
+GuiControl, Text, EditString ,
+Gosub, PreCommand
+Send, /evolution
+Gosub, PostCommand
+return
+
+ViewTime:
+Gui, Submit
+GuiControl, Text, EditString ,
+Gosub, PreCommand
+Send, /time
+Gosub, PostCommand
+return
+
+
+;"SubmitCommand(command){
+;}
+PreCommand:
+Gui, Submit
+GuiControl, Text, EditString ,
+WinActivate, ahk_exe Factorio.exe
+Send, %ChatHotKey%
+Send, {Enter}
+Send, {Enter}
+Send, %ChatHotKey%
+return
+PostCommand:
+Send, {Enter}
+GoSub, ReloadHotKey
+return
 
 Submit:
 Gui, Submit
-Hide:
+GuiControl, Text, EditString ,
+
+WinActivate, ahk_exe Factorio.exe
 if( EditString!="" )
 	Send, %EditString%
 if( ShowFactorioChat != 0 )
 	Send, {Enter}
-
+Hide:
+GuiEscape:
+GuiCloase:
+Gui, Submit
 GuiControl, Text, EditString ,
-gosub,ReloadHotKey
+GoSub, ReloadHotKey
 return
 
 GuiHide:
@@ -100,9 +206,14 @@ Gui, Hide
 return
 
 Exit:
-{
-ExitApp
-}
+Gosub, ReloadHotKey
+MsgBox,260,Exit FactorioKanji, FactorioKanjiを終了します。`n(10秒以内にいいえでキャンセルできます), 10
+IfMsgBox, No
+	Gosub, GuiShow
+IfMsgBox, Timeout
+	ExitApp
+IfMsgBox, Yes
+	ExitApp
 return
 
 
