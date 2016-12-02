@@ -8,13 +8,13 @@ Menu, Tray , DeleteAll
 Menu, Tray , Add , ウィンドウ表示, GuiShow
 Menu, Tray , Default, ウィンドウ表示
 
-fkver:="FactorioKanji 0.1.4"
+fkver:="FactorioKanji 0.1.5"
 
 Menu, Tray , Tip, %fkver%
 
 ;初期変数
 agreebackground:=1
-ShowHotKey:="{vkF4}.{vkF3}"
+ShowHotKey:="{vkF4}{vkF3}"
 ValueTranspare=180
 
 ;Gui, +AlwaysOnTop +LastFound   
@@ -102,7 +102,7 @@ Main:
 Loop
 {
 	if( ShowFactorioChat !=0 )
-		Input ,Key,T2 V, %ShowHotKey% . "." . %ChatHotKey%
+		Input ,Key,T2 V, %ShowHotKey%%ChatHotKey%
 	else
 		Input ,Key,T2 V, %ShowHotKey%
 	If ErrorLevel = Timeout
@@ -127,7 +127,7 @@ return
 
 EncodeZenHan(code){
 if( code=="全角半角" )
-	return "{vkF4}.{vkF3}"
+	return "{vkF4}{vkF3}"
 if( code=="全角半角2" )
 	return "{vkF4}"
 if( code=="全角半角3" )
@@ -136,6 +136,8 @@ return code
 }
 
 DecodeZenHan(code){
+if( code=="{vkF4}{vkF3}" )
+	return "全角半角"
 if( code=="{vkF4}.{vkF3}" )
 	return "全角半角"
 if( code=="{vkF4sc029}.{vkF3sc029}" )
