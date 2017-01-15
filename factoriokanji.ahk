@@ -8,7 +8,7 @@ Menu, Tray , DeleteAll
 Menu, Tray , Add , ウィンドウ表示, GuiShow
 Menu, Tray , Default, ウィンドウ表示
 
-fkver:="FactorioKanji 0.1.5"
+fkver:="FactorioKanji 0.1.6"
 
 Menu, Tray , Tip, %fkver%
 
@@ -18,7 +18,7 @@ ShowHotKey:="{vkF4}{vkF3}"
 ValueTranspare=180
 
 ;Gui, +AlwaysOnTop +LastFound   
-WinSet, Transparent, 255
+WinSet, Transparent, 255, %fkver%
 Gui, Margin, 0, 0
 GUI, Font , S12 Q2, Meiryo UI
 GUI, 2:Font , S12 Q2, Meiryo UI
@@ -30,7 +30,7 @@ Gui, Add, Edit, W600 vEditString
 Gui, Add, Button, x+10 vSend GSubmit Default , Send
 Gui, Add, Button, x+10 vHide GHide , Hide
 Gui, Add, Button, x+10 vExit GExit , Exit
-Gui, Add, Button, xs vToggleTranspare gToggleTranspare   , 透過切り替え(&&&g)
+Gui, Add, Button, xs vToggleTranspare gToggleTranspare   , 透過切り替え(&&g)
 Gui, Add, Button, xs vvevolution gViewEvolution, /&evolution
 Gui, Add, Button, x+10 vvtime gViewTime ,/&time
 Gui, Tab, 2
@@ -44,7 +44,8 @@ Gui, Add, Checkbox , x+10 vShowFactorioChat , チャットモード
 Gui, Add, Text, xs , 透過度設定:
 Gui, Add, Slider, x+10 AltSubmit gSlideTranspare Range0-9 TickInterval6 vSlideTranspare, 6 
 Gui, Add, Combobox, x+10 vValueTranspare   , 180||
-Gui, Add, Text, x+10 , 10-255
+Gui, Add, Text, x+10 , 10-25
+Gui, Add, Checkbox , x+10 vTranspare , 透過する
 Gui, Add, Checkbox , xs vSaveFactorio , チェックすると、設定をFactorioKanji.iniに保存します。
 Gui, Add, Button, x+10 GReloadHotKey , 更新
 Gui, Margin, 0, 0
@@ -66,6 +67,8 @@ IfExist, FactorioKanji.ini
 		GuiControl, , ShowAfterFactorio, %ShowAfterFactorio%
 		IniRead, ShowFactorioChat, FactorioKanji.ini, FactorioKanji, ShowFactorioChat
 		GuiControl, , ShowFactorioChat, %ShowFactorioChat%
+		IniRead, Transpare, FactorioKanji.ini, FactorioKanji, Transpare , 0
+		GuiControl, , Transpare, %Transpare%
 		IniRead, ValueTranspare, FactorioKanji.ini, FactorioKanji, ValueTranspare , 180
 		GuiControl, , ValueTranspare, %ValueTranspare%
 		GuiControl, ChooseString, ValueTranspare, %ValueTranspare%
@@ -73,6 +76,7 @@ IfExist, FactorioKanji.ini
 			vv:=floor( ( ValueTranspare - 5 ) / 25 -  1 )
 			GuiControl, , SlideTranspare, %vv%
 		}
+		
 
 		IniRead, ShowHotKey, FactorioKanji.ini, FactorioKanji, ShowHotKey
 		if(ShowHotKey){
@@ -97,6 +101,7 @@ IfExist, FactorioKanji.ini
 	}
 }
 GoSub, GuiShow
+Gosub, GuiTranspare
 
 Main:
 Loop
@@ -150,34 +155,39 @@ return code
 }
 
 ToggleTranspare:
-GuiControlGet, vv, , ValueTranspare
-if vv not between 0 and 255
-	vv:=255
-if(vv==255 or vv<10)
-	ttp=1
-if(ttp){
-	WinSet, Transparent, off
-	ttp=0
+GuiControlGet, tv, , Transpare
+if(tv){
+  tv=0
 }else{
-	WinSet, Transparent, %vv%
-	ttp=1
+  tv=1
 }
+GuiControl, , Transpare, %tv%
+Gosub, GuiTranspare
 return
 
 SlideTranspare:
 GuiControlGet, vv, , SlideTranspare
 vv:=vv*25+30
 GuiControl, Text, ValueTranspare, %vv%
+Gosub, GuiTranspare
+return
+
+
+GuiTranspare:
+GuiControlGet, vv, , SlideTranspare
+vv:=vv*25+30
+GuiControlGet, tv, , Transpare
 if vv not between 0 and 255
 	vv:=255
-if(vv==255 or vv<10){
-	WinSet, Transparent, off
+if(vv==255 or vv<10 or tv=0){
+	WinSet, Transparent, off,  %fkver%
 	ttp=0
 }else{
-	WinSet, Transparent, %vv%
+	WinSet, Transparent, %vv%,  %fkver%
 	ttp=1
 }
 return
+
 
 ReloadHotKey:
 Gui, Submit
@@ -193,13 +203,13 @@ if( SaveFactorio !=0 )
 	IniWrite, %ShowAfterFactorio% , FactorioKanji.ini, FactorioKanji, ShowAfterFactorio
 	IniWrite, %SaveFactorio% , FactorioKanji.ini, FactorioKanji, SaveFactorio
 	IniWrite, %ShowFactorioChat% , FactorioKanji.ini, FactorioKanji, ShowFactorioChat
+	IniWrite, %Transpare% , FactorioKanji.ini, FactorioKanji, Transpare
 	IniWrite, %ValueTranspare% , FactorioKanji.ini, FactorioKanji, ValueTranspare
 	IniWrite, %ShowHotKey% , FactorioKanji.ini, FactorioKanji, ShowHotKey
 	IniWrite, %ChatHotKey% , FactorioKanji.ini, FactorioKanji, ChatHotKey
 }
+Gosub, GuiTranspare
 return
-
-
 
 GuiShow:
 Gui, Show, , %fkver%
@@ -207,12 +217,6 @@ Guicontrol, Focus, Send
 Guicontrol, Choose, MainTab, 1
 Guicontrol, Focus, EditString
 return
-
-
-Pause::
-msgbox, %ShowHotKey%
-return
-
 
 ViewEvolution:
 command := "/evolution"
@@ -223,7 +227,6 @@ ViewTime:
 command := "/time"
 Gosub, SubmitCommand
 return
-
 
 SubmitCommand:
 IfWinExist, ahk_exe factorio.exe 
