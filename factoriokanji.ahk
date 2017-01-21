@@ -8,7 +8,7 @@ Menu, Tray , DeleteAll
 Menu, Tray , Add , ウィンドウ表示, GuiShow
 Menu, Tray , Default, ウィンドウ表示
 
-fkver:="FactorioKanji 0.1.6"
+fkver:="FactorioKanji 0.2.1"
 
 Menu, Tray , Tip, %fkver%
 
@@ -252,7 +252,7 @@ IfWinExist, ahk_exe factorio.exe
 {
 	WinActivate
 	if( EditString!="" )
-		Send, %EditString%
+		SendRaw, %EditString%
 	if( ShowFactorioChat != 0 )
 		Send, {Enter}
 }else{

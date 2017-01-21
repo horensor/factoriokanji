@@ -1,0 +1,6 @@
+FactorioKanji Copyright 2016-2017 horensor
+AutoHotkey Copyright AutoHotkey Foundation LLC
+
+Dual licensed under GPL Version 2 or the MIT licenses. Exe files (included AutoHotkey) are under GPL2. 
+FactorioKanji は GNU GENERAL PUBLIC LICENSE Version 2 (GPL2)もしくは The MIT License (MIT)のデュアルライセンスです。
+.exeファイルはAutoHotkeyを含むため.exeファイルを使う場合GPL2を選択したものとなります。(多分…)
