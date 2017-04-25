@@ -5,7 +5,7 @@
 #Persistent
 #NoTrayIcon
 
-fkver:="FactorioKanjiTest 0.3.0001"
+fkver:="FactorioKanjiTest 0.2.2.3602"
 
 SendMode Input
 IfExist, factoriokanji.ico
