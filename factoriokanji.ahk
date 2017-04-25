@@ -1,5 +1,15 @@
 ﻿#SingleInstance force
 #NoEnv
+<<<<<<< HEAD
+=======
+
+#InstallKeybdHook
+#Persistent
+#NoTrayIcon
+
+fkver:="FactorioKanjiTest 0.3.0001"
+
+>>>>>>> FactorioKanjiTest03
 SendMode Input
 IfExist, factoriokanji.ico
 	Menu, Tray, Icon, factoriokanji.ico
@@ -8,25 +18,40 @@ Menu, Tray , DeleteAll
 Menu, Tray , Add , ウィンドウ表示, GuiShow
 Menu, Tray , Default, ウィンドウ表示
 
+<<<<<<< HEAD
 fkver:="FactorioKanji 0.2.1"
 
 Menu, Tray , Tip, %fkver%
+=======
+Gui, 1: New, +HwndGuiHwndFK,%fkver% 
+Gui, %GuiHwndFK%:Default 
+>>>>>>> FactorioKanjiTest03
 
 ;初期変数
 agreebackground:=1
 ShowHotKey:="{vkF4}{vkF3}"
 ValueTranspare=180
+histstrarr:=Object()
 
+<<<<<<< HEAD
 ;Gui, +AlwaysOnTop +LastFound   
 WinSet, Transparent, 255, %fkver%
 Gui, Margin, 0, 0
 GUI, Font , S12 Q2, Meiryo UI
 GUI, 2:Font , S12 Q2, Meiryo UI
 Gui, Add, Tab2 , R1 vMainTab , Input||Option
+=======
+WinSetTitle,ahk_id %GuiHwndFK%, ,  %fkver%
+WinSet, Transparent, 255
+Gui, +Delimiter`n
+Gui, Margin, 0, 0
+GUI, Font , S12 Q2, Meiryo UI
+Gui, Add, Tab3 , R1 vMainTab -Theme, Input`n`nOption`nAbout
+>>>>>>> FactorioKanjiTest03
 Gui, Margin, 10, 10
 Gui, Tab, 1, 1
-Gui, Add, Text, Section , FactorioKanji(Hide,Sendで常駐、Exitで終了)
-Gui, Add, Edit, W600 vEditString 
+Gui, Add, Text, Section , FactorioKanji(Hideで最小化、Exitで終了)
+Gui, Add, ComboBox, W600 vEditString 
 Gui, Add, Button, x+10 vSend GSubmit Default , Send
 Gui, Add, Button, x+10 vHide GHide , Hide
 Gui, Add, Button, x+10 vExit GExit , Exit
@@ -35,8 +60,9 @@ Gui, Add, Button, xs vvevolution gViewEvolution, /&evolution
 Gui, Add, Button, x+10 vvtime gViewTime ,/&time
 Gui, Tab, 2
 Gui, Add, Text, Section , FactorioKanji起動キー:
-Gui, Add, Combobox, x+10 vShowHotKey, 全角半角||{F1}|{Ins}|{Tab}|全角半角2|全角半角3
+Gui, Add, Combobox, x+10 vShowHotKey, 全角半角`n`n{F1}`n{Ins}`n{Tab}`n全角半角2`n全角半角3
 Gui, Add, Text, x+10 , チャット開始キー:
+<<<<<<< HEAD
 Gui, Add, Combobox, x+10 vChatHotKey, @||
 Gui, Add, Button, x+10 GReloadHotKey , 更新
 Gui, Add, Checkbox , xs vShowAfterFactorio checked, チェックすると、Factorioを起動してないとき自動終了しません。
@@ -57,6 +83,29 @@ hh+=10
 GuiControl, Move, MainTab, w%ww% h%hh%
 Gui, Show, AutoSize, WinControl script
 
+=======
+Gui, Add, Combobox, x+10 vChatHotKey, @`n`n
+Gui, Add, Checkbox , xs vShowAfterFactorio checked, Factorio起動中か確認しない
+Gui, Add, Checkbox , x+10 vShowTrayIcon , 通知領域にアイコンを表示
+Gui, Add, Checkbox , x+10 vShowFactorioChat , チャットモード
+Gui, Add, Text, xs , 透過度設定:
+Gui, Add, Slider, x+10 AltSubmit gSlideTranspare Range0-9 TickInterval6 vSlideTranspare, 6 
+Gui, Add, Combobox, x+10 vValueTranspare  gSetTranspare , 180`n`n
+Gui, Add, Text, x+10 , 30-255
+Gui, Add, Checkbox , x+10 vTranspare gSetTranspare , 透過する
+Gui, Add, Checkbox , xs vSaveFactorio , チェックすると、設定をFactorioKanji.iniに保存します。
+Gui, Add, Button, x+10 gReloadHotKey , 更新
+Gui, Tab, 3
+Gui, Add, Text, Section , FactorioKanji
+Gui, Add, Text, xs, %fkver%
+Gui, Add, Text, xs, Licenced under MIT X11 or GPL2 (C)horensor
+Gui, Font, underline
+Gui, Add, Text, xs cBlue gRunURL      , https://github.com/horensor/FactorioKanji
+Gui, Font, norm
+Gui, Show, AutoSize
+Gui, Margin, 0, 0
+Gui, Show, AutoSize
+>>>>>>> FactorioKanjiTest03
 
 IfExist, FactorioKanji.ini
 {
@@ -100,16 +149,16 @@ IfExist, FactorioKanji.ini
 		}
 	}
 }
+Gosub, ReloadHotKey
 GoSub, GuiShow
-Gosub, GuiTranspare
 
 Main:
 Loop
 {
 	if( ShowFactorioChat !=0 )
-		Input ,Key,T2 V, %ShowHotKey%%ChatHotKey%
+		Input ,Key,T10 V, %ShowHotKey%%ChatHotKey%
 	else
-		Input ,Key,T2 V, %ShowHotKey%
+		Input ,Key,T10 V, %ShowHotKey%
 	If ErrorLevel = Timeout
 	{
 		IfWinExist, ahk_exe factorio.exe
@@ -174,6 +223,7 @@ return
 
 
 GuiTranspare:
+<<<<<<< HEAD
 GuiControlGet, vv, , SlideTranspare
 vv:=vv*25+30
 GuiControlGet, tv, , Transpare
@@ -184,6 +234,18 @@ if(vv==255 or vv<10 or tv=0){
 	ttp=0
 }else{
 	WinSet, Transparent, %vv%,  %fkver%
+=======
+GuiControlGet, tv, , ValueTranspare
+GuiControlGet, vv, , Transpare
+
+if tv not between 0 and 255
+	tv:=255
+if(tv==255 or tv<30 or vv=0){
+	WinSet, Transparent, off, ahk_id %GuiHwndFK%
+	ttp=0
+}else{
+	WinSet, Transparent, %tv%, ahk_id %GuiHwndFK%
+>>>>>>> FactorioKanjiTest03
 	ttp=1
 }
 return
@@ -212,7 +274,7 @@ Gosub, GuiTranspare
 return
 
 GuiShow:
-Gui, Show, , %fkver%
+Gui, Show
 Guicontrol, Focus, Send
 Guicontrol, Choose, MainTab, 1
 Guicontrol, Focus, EditString
@@ -246,6 +308,7 @@ GoSub, ReloadHotKey
 return
 
 Submit:
+<<<<<<< HEAD
 Gui, Submit
 GuiControl, Text, EditString ,
 IfWinExist, ahk_exe factorio.exe
@@ -271,6 +334,44 @@ GuiHide:
 {
 Gui, Hide
 }
+=======
+Gui, Submit, NoHide
+ssstr:=EditString
+;GuiControl, Text, EditString ,
+if( ssstr != "" ){
+  histstrarr.Insert(ssstr)
+  if( histstrarr.Maxindex() > 50 ){
+    histstrarr.Remove(1, histstrarr.Maxindex() - 50)
+  }
+  vstr := "`n"
+  For k, v in histstrarr
+    vstr := vstr  . v . "`n"
+  vstr := vstr . " `n`n"
+  GuiControl, , EditString, %vstr%
+  IfWinExist, ahk_exe factorio.exe
+  {
+  	WinActivate, ahk_exe factorio.exe
+  		SendRaw, %ssstr%
+  	if( ShowFactorioChat != 0 )
+  		Send, {Enter}
+  }else{
+  	MsgBox, 起動中の factorio.exe が見つかりませんでした。
+  	return
+  }
+}
+Hide:
+GuiEscape:
+GuiClose:
+Gui, Submit, NoHide
+GoSub, ReloadHotKey
+IfWinExist, ahk_exe factorio.exe
+	WinActivate, ahk_exe factorio.exe
+Else 
+if( ShowTrayIcon )
+	Gui, Hide
+Else
+	Gui, Minimize
+>>>>>>> FactorioKanjiTest03
 return
 
 Exit:
@@ -285,3 +386,6 @@ IfMsgBox, Yes
 return
 
 
+RunURL:
+Run, https://github.com/horensor/FactorioKanji
+return
