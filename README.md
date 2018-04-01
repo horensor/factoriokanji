@@ -3,6 +3,20 @@
   日本語入力をするためにダイアログを出すためのAutoHotkeyスクリプトです。
   Windows NT系統なら動作すると思いますが、メインはWindows10で動作確認しております。
 
+## 開発終了のお知らせ 2018年4月
+
+  FactorioKanji はFactorio 0.16においてIMEより入力可能となったため、
+  現開発者による開発を終了します。
+  gitでの公開を取りやめる予定はありませんが、基本的には放置となりますため、特に
+  実行形式ファイルのアップデートを行わないため潜在的なリスクとなりえます。
+  おそらくは引き続き AutoHotkey 1.1 対応の AutoHotkey 本体で利用することは可能かと
+  思われますが、こちらの支援も基本的に終了とさせていただければと存じます。
+  
+  今更となってしまいましたが、面白いゲームを作っている Wube Software Ltd. の皆さん、
+  公開ゲームサーバー DEKKAI TUBO （ http://www.fourslippers.com/factorio/ ）の
+  運営をなさっている FourSlippers の皆さん、FactorioKanji をご利用いただいていた
+  皆さんをはじめ全ての工場長に感謝しております。ありがとうございました！
+
 
 ## ダウンロード・インストール
   <https://github.com/horensor/FactorioKanji/releases>
